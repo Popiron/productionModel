@@ -74,22 +74,22 @@ namespace productionModel
             {
                 check = false;
 
-                foreach (var rule in Helpers.DirectOutput(selectedFacts,data.Item2))
+                foreach (var rule in Helpers.DirectOutput(selectedFacts, data.Item2))
                 {
-                        selectedFacts.Add(rule.Action);
-                        outputTextBox.Text += $"\nШаг # {step}\n";
-                        outputTextBox.Text += "--------------------------------\n";
-                        outputTextBox.Text += $"Комментарий: {rule.Comment}\n";
-                        outputTextBox.Text += $"Применяемое правило: {rule}\n";
-                        outputTextBox.Text += $"Полученный факт: {rule.Action}\n";
-                        check = true;
-                        if (rule.IsSolution)
-                        {
-                            solutionTextBox.Text += "--------------------------------\n";
-                            solutionTextBox.Text += $"Комментарий: {rule.Comment}\n";
-                            solutionTextBox.Text += $"Применяемое правило: {rule}\n";
-                            solutionTextBox.Text += $"Полученный результат: {rule.Action}\n";
-                        }
+                    selectedFacts.Add(rule.Action);
+                    outputTextBox.Text += $"\nШаг # {step}\n";
+                    outputTextBox.Text += "--------------------------------\n";
+                    outputTextBox.Text += $"Комментарий: {rule.Comment}\n";
+                    outputTextBox.Text += $"Применяемое правило: {rule}\n";
+                    outputTextBox.Text += $"Полученный факт: {rule.Action}\n";
+                    check = true;
+                    if (rule.IsSolution)
+                    {
+                        solutionTextBox.Text += "--------------------------------\n";
+                        solutionTextBox.Text += $"Комментарий: {rule.Comment}\n";
+                        solutionTextBox.Text += $"Применяемое правило: {rule}\n";
+                        solutionTextBox.Text += $"Полученный результат: {rule.Action}\n";
+                    }
                 }
                 step++;
             }
@@ -115,6 +115,65 @@ namespace productionModel
         {
             outputTextBox.Text = "";
             solutionTextBox.Text = "";
+        }
+
+        private void getPath(Helpers.Node solution, HashSet<string> evlRules)
+        {
+            if (solution != null && solution.Proves != null)
+            {
+                if (!evlRules.Contains(solution.Rule.ToString()))
+                    evlRules.Add(solution.Rule.ToString());
+                foreach (var prove in solution.Proves)
+                {
+
+                    if (!evlRules.Contains(prove.ToString()) && prove.Proves != null)
+                    {
+                        evlRules.Add(prove.ToString());
+
+                    }
+                }
+                foreach (var p in solution.Proves)
+                    getPath(p, evlRules);
+            }
+
+        }
+
+        private void backwardOutputButton_Click(object sender, EventArgs e)
+        {
+            RefreshRules();
+            outputTextBox.Text = "";
+            var selectedFacts = dFactsBox.CheckedItems.Cast<string>().ToHashSet();
+            var selFacts = checkedFactsBox.CheckedItems.Cast<string>().ToHashSet();
+            outputTextBox.Text += "Обратный поиск\n";
+            outputTextBox.Text += "Выбранные факты:\n";
+            int factNum = 1;
+            foreach (var fact in selectedFacts)
+            {
+                outputTextBox.Text += $"{factNum}:  {fact}\n";
+                factNum++;
+            }
+            outputTextBox.Text += '\n';
+            var solution = Helpers.Prove(selectedFacts.First(), selFacts, data.Item2);
+            if (solution == null)
+            {
+                outputTextBox.Text += "--------------------------------------------------------------\n";
+                outputTextBox.Text += "Правило невыводимо\n";
+                outputTextBox.Text += "--------------------------------------------------------------\n";
+
+            }
+            else
+            {
+                HashSet<string> evlRules = new HashSet<string>();
+                getPath(solution, evlRules);
+                var rul = evlRules.ToList();
+                for (int i = 0; i < rul.Count; i++)
+                {
+                    outputTextBox.Text += $"\nШаг # {i + 1}\n";
+                    outputTextBox.Text += "--------------------------------------------------------------\n";
+                    outputTextBox.Text += $"Полученное правило: {rul[i]}\n";
+                    outputTextBox.Text += "--------------------------------------------------------------\n";
+                }
+            }
         }
     }
 }

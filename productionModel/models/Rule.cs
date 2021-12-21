@@ -15,7 +15,7 @@ namespace ProductionModel
         public bool IsSolution { get; set; }
 
 
-        public Rule(HashSet<string> conditions, string action,  bool isSolution, string comment = "")
+        public Rule(HashSet<string> conditions, string action,  bool isSolution = false, string comment = "")
         {
             Conditions = conditions;
             Action = action;

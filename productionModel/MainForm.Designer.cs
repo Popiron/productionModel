@@ -34,10 +34,11 @@ namespace productionModel
             this.directOutputButton = new System.Windows.Forms.Button();
             this.checkedFactsBox = new System.Windows.Forms.CheckedListBox();
             this.outputBox = new System.Windows.Forms.GroupBox();
-            this.clearTextBoxButton = new System.Windows.Forms.Button();
-            this.outputTextBox = new System.Windows.Forms.RichTextBox();
             this.resultBox = new System.Windows.Forms.GroupBox();
             this.solutionTextBox = new System.Windows.Forms.RichTextBox();
+            this.clearTextBoxButton = new System.Windows.Forms.Button();
+            this.outputTextBox = new System.Windows.Forms.RichTextBox();
+            this.backwardOutputButton = new System.Windows.Forms.Button();
             this.controlPanel.SuspendLayout();
             this.outputBox.SuspendLayout();
             this.resultBox.SuspendLayout();
@@ -45,12 +46,15 @@ namespace productionModel
             // 
             // controlPanel
             // 
+            this.controlPanel.Controls.Add(this.backwardOutputButton);
             this.controlPanel.Controls.Add(this.dFactsBox);
             this.controlPanel.Controls.Add(this.directOutputButton);
             this.controlPanel.Controls.Add(this.checkedFactsBox);
-            this.controlPanel.Location = new System.Drawing.Point(12, 12);
+            this.controlPanel.Location = new System.Drawing.Point(6, 6);
+            this.controlPanel.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.controlPanel.Name = "controlPanel";
-            this.controlPanel.Size = new System.Drawing.Size(400, 905);
+            this.controlPanel.Padding = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            this.controlPanel.Size = new System.Drawing.Size(215, 424);
             this.controlPanel.TabIndex = 0;
             this.controlPanel.TabStop = false;
             this.controlPanel.Text = "Найстройки";
@@ -58,17 +62,19 @@ namespace productionModel
             // dFactsBox
             // 
             this.dFactsBox.FormattingEnabled = true;
-            this.dFactsBox.Location = new System.Drawing.Point(6, 372);
+            this.dFactsBox.Location = new System.Drawing.Point(3, 174);
+            this.dFactsBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.dFactsBox.Name = "dFactsBox";
             this.dFactsBox.ScrollAlwaysVisible = true;
-            this.dFactsBox.Size = new System.Drawing.Size(388, 328);
+            this.dFactsBox.Size = new System.Drawing.Size(211, 148);
             this.dFactsBox.TabIndex = 2;
             // 
             // directOutputButton
             // 
-            this.directOutputButton.Location = new System.Drawing.Point(21, 828);
+            this.directOutputButton.Location = new System.Drawing.Point(11, 388);
+            this.directOutputButton.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.directOutputButton.Name = "directOutputButton";
-            this.directOutputButton.Size = new System.Drawing.Size(350, 60);
+            this.directOutputButton.Size = new System.Drawing.Size(188, 28);
             this.directOutputButton.TabIndex = 1;
             this.directOutputButton.Text = "Прямой вывод";
             this.directOutputButton.UseVisualStyleBackColor = true;
@@ -77,10 +83,11 @@ namespace productionModel
             // checkedFactsBox
             // 
             this.checkedFactsBox.FormattingEnabled = true;
-            this.checkedFactsBox.Location = new System.Drawing.Point(6, 38);
+            this.checkedFactsBox.Location = new System.Drawing.Point(3, 18);
+            this.checkedFactsBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.checkedFactsBox.Name = "checkedFactsBox";
             this.checkedFactsBox.ScrollAlwaysVisible = true;
-            this.checkedFactsBox.Size = new System.Drawing.Size(388, 328);
+            this.checkedFactsBox.Size = new System.Drawing.Size(211, 148);
             this.checkedFactsBox.TabIndex = 0;
             // 
             // outputBox
@@ -88,18 +95,43 @@ namespace productionModel
             this.outputBox.Controls.Add(this.resultBox);
             this.outputBox.Controls.Add(this.clearTextBoxButton);
             this.outputBox.Controls.Add(this.outputTextBox);
-            this.outputBox.Location = new System.Drawing.Point(418, 12);
+            this.outputBox.Location = new System.Drawing.Point(225, 6);
+            this.outputBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.outputBox.Name = "outputBox";
-            this.outputBox.Size = new System.Drawing.Size(518, 905);
+            this.outputBox.Padding = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            this.outputBox.Size = new System.Drawing.Size(279, 424);
             this.outputBox.TabIndex = 1;
             this.outputBox.TabStop = false;
             this.outputBox.Text = "Вывод";
             // 
+            // resultBox
+            // 
+            this.resultBox.Controls.Add(this.solutionTextBox);
+            this.resultBox.Location = new System.Drawing.Point(3, 232);
+            this.resultBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            this.resultBox.Name = "resultBox";
+            this.resultBox.Padding = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            this.resultBox.Size = new System.Drawing.Size(272, 154);
+            this.resultBox.TabIndex = 3;
+            this.resultBox.TabStop = false;
+            this.resultBox.Text = "Решение";
+            // 
+            // solutionTextBox
+            // 
+            this.solutionTextBox.Location = new System.Drawing.Point(3, 18);
+            this.solutionTextBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            this.solutionTextBox.Name = "solutionTextBox";
+            this.solutionTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
+            this.solutionTextBox.Size = new System.Drawing.Size(268, 126);
+            this.solutionTextBox.TabIndex = 1;
+            this.solutionTextBox.Text = "";
+            // 
             // clearTextBoxButton
             // 
-            this.clearTextBoxButton.Location = new System.Drawing.Point(76, 828);
+            this.clearTextBoxButton.Location = new System.Drawing.Point(41, 388);
+            this.clearTextBoxButton.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.clearTextBoxButton.Name = "clearTextBoxButton";
-            this.clearTextBoxButton.Size = new System.Drawing.Size(350, 60);
+            this.clearTextBoxButton.Size = new System.Drawing.Size(188, 28);
             this.clearTextBoxButton.TabIndex = 2;
             this.clearTextBoxButton.Text = "Очистить";
             this.clearTextBoxButton.UseVisualStyleBackColor = true;
@@ -107,39 +139,33 @@ namespace productionModel
             // 
             // outputTextBox
             // 
-            this.outputTextBox.Location = new System.Drawing.Point(6, 38);
+            this.outputTextBox.Location = new System.Drawing.Point(3, 18);
+            this.outputTextBox.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.outputTextBox.Name = "outputTextBox";
             this.outputTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.outputTextBox.Size = new System.Drawing.Size(506, 450);
+            this.outputTextBox.Size = new System.Drawing.Size(274, 213);
             this.outputTextBox.TabIndex = 0;
             this.outputTextBox.Text = "";
             // 
-            // resultBox
+            // backwardOutputButton
             // 
-            this.resultBox.Controls.Add(this.solutionTextBox);
-            this.resultBox.Location = new System.Drawing.Point(6, 494);
-            this.resultBox.Name = "resultBox";
-            this.resultBox.Size = new System.Drawing.Size(506, 328);
-            this.resultBox.TabIndex = 3;
-            this.resultBox.TabStop = false;
-            this.resultBox.Text = "Решение";
-            // 
-            // solutionTextBox
-            // 
-            this.solutionTextBox.Location = new System.Drawing.Point(6, 38);
-            this.solutionTextBox.Name = "solutionTextBox";
-            this.solutionTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.solutionTextBox.Size = new System.Drawing.Size(494, 264);
-            this.solutionTextBox.TabIndex = 1;
-            this.solutionTextBox.Text = "";
+            this.backwardOutputButton.Location = new System.Drawing.Point(11, 358);
+            this.backwardOutputButton.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            this.backwardOutputButton.Name = "backwardOutputButton";
+            this.backwardOutputButton.Size = new System.Drawing.Size(188, 28);
+            this.backwardOutputButton.TabIndex = 3;
+            this.backwardOutputButton.Text = "Обратный вывод";
+            this.backwardOutputButton.UseVisualStyleBackColor = true;
+            this.backwardOutputButton.Click += new System.EventHandler(this.backwardOutputButton_Click);
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(950, 929);
+            this.ClientSize = new System.Drawing.Size(512, 435);
             this.Controls.Add(this.outputBox);
             this.Controls.Add(this.controlPanel);
+            this.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.Name = "MainForm";
             this.Text = "Main";
             this.controlPanel.ResumeLayout(false);
@@ -160,6 +186,7 @@ namespace productionModel
         private System.Windows.Forms.CheckedListBox dFactsBox;
         private System.Windows.Forms.GroupBox resultBox;
         private System.Windows.Forms.RichTextBox solutionTextBox;
+        private System.Windows.Forms.Button backwardOutputButton;
     }
 }
 
