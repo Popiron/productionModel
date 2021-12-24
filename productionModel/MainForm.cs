@@ -23,6 +23,7 @@ namespace productionModel
             data = Helpers.Parse(sFilePath);
             RefreshRules();
             FillFacts();
+            //FilldFacts();
         }
 
         private void RefreshRules()
@@ -38,6 +39,15 @@ namespace productionModel
             foreach (var fact in data.Item1)
             {
                 checkedFactsBox.Items.Add(fact);
+            }
+        }
+
+        private void FilldFacts()
+        {
+            foreach (var fact in data.Item2)
+            {
+                if (!dFactsBox.Items.Contains(fact.Action))
+                dFactsBox.Items.Add(fact.Action);
             }
         }
 
@@ -153,7 +163,7 @@ namespace productionModel
                 factNum++;
             }
             outputTextBox.Text += '\n';
-            var solution = Helpers.Prove(selecteddFacts.First(), selectedFacts, data.Item2);
+            var solution = Helpers.BackwardOutput(selecteddFacts.First(), selectedFacts, data.Item2);
             if (solution == null)
             {
                 outputTextBox.Text += "--------------------------------------------------------------\n";

@@ -172,8 +172,7 @@ namespace productionModel
 
         //Нерекурсивный алгоритм обратного поиска. Принимает на вход факт который нужно доказать, начальные факты, и правила.
         //Возвращает одностороннее дерево нодов, рекурсивно определяемое как Rules - применяемое правило и Proves - ноды доказательства для всех фактов, требуемых для его выполнения.
-        //Возвращает null, если решение не найдено
-        public static Node Prove(string prove, HashSet<string> facts, HashSet<Rule> rules)
+        public static Node BackwardOutput(string prove, HashSet<string> facts, HashSet<Rule> rules)
         {
             Node solution = null;
             var branches = new Stack<SubTree>();
@@ -207,7 +206,7 @@ namespace productionModel
                 else if (currBranch.stage == 1)
                 {
                     var possibleRules = rules.Where(x => x.Action == currBranch.prove).ToList();
-                    //Защита от зацикливания. Да, она говно. Нет, она работает.
+                    //Защита от зацикливания.
                     if (currBranch.proofPath.Contains(currBranch.prove))
                     {
                         solution = unsolvable;
