@@ -142,18 +142,18 @@ namespace productionModel
         {
             RefreshRules();
             outputTextBox.Text = "";
-            var selectedFacts = dFactsBox.CheckedItems.Cast<string>().ToHashSet();
-            var selFacts = checkedFactsBox.CheckedItems.Cast<string>().ToHashSet();
+            var selecteddFacts = dFactsBox.CheckedItems.Cast<string>().ToHashSet();
+            var selectedFacts = checkedFactsBox.CheckedItems.Cast<string>().ToHashSet();
             outputTextBox.Text += "Обратный поиск\n";
             outputTextBox.Text += "Выбранные факты:\n";
             int factNum = 1;
-            foreach (var fact in selectedFacts)
+            foreach (var fact in selecteddFacts)
             {
                 outputTextBox.Text += $"{factNum}:  {fact}\n";
                 factNum++;
             }
             outputTextBox.Text += '\n';
-            var solution = Helpers.Prove(selectedFacts.First(), selFacts, data.Item2);
+            var solution = Helpers.Prove(selecteddFacts.First(), selectedFacts, data.Item2);
             if (solution == null)
             {
                 outputTextBox.Text += "--------------------------------------------------------------\n";

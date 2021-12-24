@@ -125,7 +125,7 @@ namespace productionModel
         }
 
         //Представление ветви дерева. Хранит данные, нужные для каждого уровня глубины и определения, на каком И/Или node мы находимся
-        public class Branch
+        public class SubTree
         {
             public string prove { get; set; }
             public int stage { get; set; }
@@ -138,7 +138,7 @@ namespace productionModel
 
             public List<string> proofPath { get; set; }
 
-            public Branch(string prove, List<Node> nodes, List<string> proofPath, int stage = 0, int nodeNum = 0, int factNum = 0)
+            public SubTree(string prove, List<Node> nodes, List<string> proofPath, int stage = 0, int nodeNum = 0, int factNum = 0)
             {
                 this.prove = prove;
                 buffer = nodes;
@@ -147,7 +147,7 @@ namespace productionModel
                 this.factNum = factNum;
                 this.proofPath = proofPath;
             }
-            public Branch(string prove, List<Node> nodes, int stage = 0, int nodeNum = 0, int factNum = 0)
+            public SubTree(string prove, List<Node> nodes, int stage = 0, int nodeNum = 0, int factNum = 0)
             {
                 this.prove = prove;
                 buffer = nodes;
@@ -157,7 +157,7 @@ namespace productionModel
                 proofPath = new List<string>();
             }
 
-            public Branch(string prove, int stage = 0, int nodeNum = 0, int factNum = 0)
+            public SubTree(string prove, int stage = 0, int nodeNum = 0, int factNum = 0)
             {
                 this.prove = prove;
                 buffer = new List<Node>();
@@ -168,7 +168,6 @@ namespace productionModel
             }
         }
 
-        //Cпециальный нод, помечающий невозможность решения этой ветви (в отличии от Null, указывающей просто отсутствие этого решения)
         public static Node unsolvable = new Node("unsolvable");
 
         //Нерекурсивный алгоритм обратного поиска. Принимает на вход факт который нужно доказать, начальные факты, и правила.
@@ -177,8 +176,8 @@ namespace productionModel
         public static Node Prove(string prove, HashSet<string> facts, HashSet<Rule> rules)
         {
             Node solution = null;
-            var branches = new Stack<Branch>();
-            branches.Push(new Branch(prove));
+            var branches = new Stack<SubTree>();
+            branches.Push(new SubTree(prove));
 
 
             while (branches.Count != 0)
@@ -200,7 +199,7 @@ namespace productionModel
                     }
                     else
                     {
-                        branches.Push(new Branch(currBranch.prove, new List<Node>(), currBranch.proofPath, 1));
+                        branches.Push(new SubTree(currBranch.prove, new List<Node>(), currBranch.proofPath, 1));
                         continue;
                     }
                 }
@@ -230,7 +229,7 @@ namespace productionModel
                         else if (possibleRules.Count - 1 > currBranch.nodeNum)
                         {
                             solution = null;
-                            branches.Push(new Branch(currBranch.prove, 1, currBranch.nodeNum + 1, 0));
+                            branches.Push(new SubTree(currBranch.prove, 1, currBranch.nodeNum + 1, 0));
                         }
                         continue;
                     }
@@ -242,8 +241,8 @@ namespace productionModel
                     {
                         var t = currBranch.proofPath.ToList();
                         t.Add(currBranch.prove);
-                        branches.Push(new Branch(currBranch.prove, currBranch.buffer, currBranch.proofPath, 1, currBranch.nodeNum, currBranch.factNum + 1));
-                        branches.Push(new Branch(possibleRules[currBranch.nodeNum].Conditions.ToList()[currBranch.factNum], currBranch.buffer, t, 0));
+                        branches.Push(new SubTree(currBranch.prove, currBranch.buffer, currBranch.proofPath, 1, currBranch.nodeNum, currBranch.factNum + 1));
+                        branches.Push(new SubTree(possibleRules[currBranch.nodeNum].Conditions.ToList()[currBranch.factNum], currBranch.buffer, t, 0));
                         continue;
                     }
                 }
