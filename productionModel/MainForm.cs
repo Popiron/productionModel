@@ -50,6 +50,10 @@ namespace productionModel
                 dFactsBox.Items.Add(fact.Action);
             }
         }
+        private void CleardFacts()
+        {
+            dFactsBox.Items.Clear();
+        }
 
         public List<string> Difference(List<string> lst1, List<string> lst2)
         {
@@ -129,20 +133,20 @@ namespace productionModel
 
         private void getPath(Helpers.Node solution, HashSet<string> evlRules)
         {
-            if (solution != null && solution.Proves != null)
+            if (solution != null && solution.Steps != null)
             {
                 if (!evlRules.Contains(solution.Rule.ToString()))
                     evlRules.Add(solution.Rule.ToString());
-                foreach (var prove in solution.Proves)
+                foreach (var prove in solution.Steps)
                 {
 
-                    if (!evlRules.Contains(prove.ToString()) && prove.Proves != null)
+                    if (!evlRules.Contains(prove.ToString()) && prove.Steps != null)
                     {
                         evlRules.Add(prove.ToString());
 
                     }
                 }
-                foreach (var p in solution.Proves)
+                foreach (var p in solution.Steps)
                     getPath(p, evlRules);
             }
 
@@ -183,6 +187,18 @@ namespace productionModel
                     outputTextBox.Text += $"Полученное правило: {rul[i]}\n";
                     outputTextBox.Text += "--------------------------------------------------------------\n";
                 }
+            }
+        }
+
+        private void dFactscheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (dFactscheckBox.Checked)
+            {
+                FilldFacts();
+            }
+            else 
+            {
+                CleardFacts();
             }
         }
     }

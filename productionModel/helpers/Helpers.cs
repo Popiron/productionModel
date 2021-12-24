@@ -62,38 +62,33 @@ namespace productionModel
         }
 
 
-
-
-
-
-
         public class Node
         {
             Rule rule;
-            List<Node> proves;
-            //Применяемое правило
+            List<Node> steps;
+
             public Rule Rule
             {
                 get { return rule; }
                 set { rule = value; }
             }
-            //Node доказательства для всех фактов, требуемых для выполнения правила в этом ноде
-            public List<Node> Proves
+
+            public List<Node> Steps
             {
-                get { return proves; }
+                get { return steps; }
             }
 
-            public Node(Rule rule, List<Node> proves)
+            public Node(Rule rule, List<Node> steps)
             {
                 this.rule = rule;
-                this.proves = proves;
+                this.steps = steps;
             }
 
-            public Node(string fact, List<Node> proves)
+            public Node(string fact, List<Node> steps)
             {
-                var prereqs = proves.ConvertAll(x => x.rule.Action);
+                var prereqs = steps.ConvertAll(x => x.rule.Action);
                 rule = new Rule(new HashSet<string>(prereqs), fact);
-                this.proves = proves;
+                this.steps = steps;
             }
 
 
@@ -106,16 +101,16 @@ namespace productionModel
             {
                 var res = "";
 
-                if (Proves == null)
+                if (Steps == null)
                 {
                     res = rule.Action;
                 }
                 else
                 {
-                    foreach (var proof in Proves)
+                    foreach (var proof in Steps)
                     {
                         res += proof.Rule.Action;
-                        if (proof != Proves.Last())
+                        if (proof != Steps.Last())
                             res += ",";
                     }
                     res += " ­-> " + rule.Action;
@@ -124,28 +119,24 @@ namespace productionModel
             }
         }
 
-        //Представление ветви дерева. Хранит данные, нужные для каждого уровня глубины и определения, на каком И/Или node мы находимся
         public class SubTree
         {
             public string prove { get; set; }
             public int stage { get; set; }
 
-            //Номер "Или" поддерева
-            public int nodeNum { get; set; }
-            //Номер "И" поддерева
-            public int factNum { get; set; }
+            public int nodeNum { get; set; }    //or
+            public int factNum { get; set; }    //and
             public List<Node> buffer { get; set; }
+            public List<string> path { get; set; }
 
-            public List<string> proofPath { get; set; }
-
-            public SubTree(string prove, List<Node> nodes, List<string> proofPath, int stage = 0, int nodeNum = 0, int factNum = 0)
+            public SubTree(string prove, List<Node> nodes, List<string> path, int stage = 0, int nodeNum = 0, int factNum = 0)
             {
                 this.prove = prove;
                 buffer = nodes;
                 this.stage = stage;
                 this.nodeNum = nodeNum;
                 this.factNum = factNum;
-                this.proofPath = proofPath;
+                this.path = path;
             }
             public SubTree(string prove, List<Node> nodes, int stage = 0, int nodeNum = 0, int factNum = 0)
             {
@@ -154,7 +145,7 @@ namespace productionModel
                 this.stage = stage;
                 this.nodeNum = nodeNum;
                 this.factNum = factNum;
-                proofPath = new List<string>();
+                path = new List<string>();
             }
 
             public SubTree(string prove, int stage = 0, int nodeNum = 0, int factNum = 0)
@@ -164,33 +155,31 @@ namespace productionModel
                 this.stage = stage;
                 this.nodeNum = nodeNum;
                 this.factNum = factNum;
-                proofPath = new List<string>();
+                path = new List<string>();
             }
         }
 
         public static Node unsolvable = new Node("unsolvable");
 
-        //Нерекурсивный алгоритм обратного поиска. Принимает на вход факт который нужно доказать, начальные факты, и правила.
-        //Возвращает одностороннее дерево нодов, рекурсивно определяемое как Rules - применяемое правило и Proves - ноды доказательства для всех фактов, требуемых для его выполнения.
-        public static Node BackwardOutput(string prove, HashSet<string> facts, HashSet<Rule> rules)
+        public static Node BackwardOutput(string toProve, HashSet<string> facts, HashSet<Rule> rules)
         {
             Node solution = null;
-            var branches = new Stack<SubTree>();
-            branches.Push(new SubTree(prove));
+            var subTrees = new Stack<SubTree>();
+            subTrees.Push(new SubTree(toProve));
 
 
-            while (branches.Count != 0)
+            while (subTrees.Count != 0)
             {
-                var currBranch = branches.Pop();
-                //Рассчёт доказуемости каждого факта
-                if (currBranch.stage == 0)
+                var currST = subTrees.Pop();
+
+                if (currST.stage == 0)
                 {
-                    if (facts.Contains(currBranch.prove))
+                    if (facts.Contains(currST.prove))
                     {
-                        solution = new Node(currBranch.prove);
+                        solution = new Node(currST.prove);
                         continue;
                     }
-                    var possibleRules = rules.Where(x => x.Action == currBranch.prove).ToList();
+                    var possibleRules = rules.Where(x => x.Action == currST.prove).ToList();
                     if (possibleRules.Count == 0)
                     {
                         solution = unsolvable;
@@ -198,37 +187,36 @@ namespace productionModel
                     }
                     else
                     {
-                        branches.Push(new SubTree(currBranch.prove, new List<Node>(), currBranch.proofPath, 1));
+                        subTrees.Push(new SubTree(currST.prove, new List<Node>(), currST.path, 1));
                         continue;
                     }
                 }
-                //Рассмотрение структуры дерева
-                else if (currBranch.stage == 1)
+                else if (currST.stage == 1)
                 {
-                    var possibleRules = rules.Where(x => x.Action == currBranch.prove).ToList();
-                    //Защита от зацикливания.
-                    if (currBranch.proofPath.Contains(currBranch.prove))
+                    var possibleRules = rules.Where(x => x.Action == currST.prove).ToList();
+                    
+                    if (currST.path.Contains(currST.prove))
                     {
                         solution = unsolvable;
                         continue;
                     }
-                    if (possibleRules.Count <= currBranch.nodeNum)
+                    if (possibleRules.Count <= currST.nodeNum)
                     {
                         continue;
                     }
-                    if (solution != null && solution != unsolvable && !currBranch.buffer.Contains(solution))
+                    if (solution != null && solution != unsolvable && !currST.buffer.Contains(solution))
                     {
-                        currBranch.buffer.Add(solution);
+                        currST.buffer.Add(solution);
                         solution = null;
                     }
-                    if (possibleRules[currBranch.nodeNum].Conditions.Count == currBranch.factNum)
+                    if (possibleRules[currST.nodeNum].Conditions.Count == currST.factNum)
                     {
-                        if (currBranch.buffer.Count != 0 && solution != unsolvable)
-                            solution = new Node(currBranch.prove, currBranch.buffer);
-                        else if (possibleRules.Count - 1 > currBranch.nodeNum)
+                        if (currST.buffer.Count != 0 && solution != unsolvable)
+                            solution = new Node(currST.prove, currST.buffer);
+                        else if (possibleRules.Count - 1 > currST.nodeNum)
                         {
                             solution = null;
-                            branches.Push(new SubTree(currBranch.prove, 1, currBranch.nodeNum + 1, 0));
+                            subTrees.Push(new SubTree(currST.prove, 1, currST.nodeNum + 1, 0));
                         }
                         continue;
                     }
@@ -238,10 +226,10 @@ namespace productionModel
                     }
                     else
                     {
-                        var t = currBranch.proofPath.ToList();
-                        t.Add(currBranch.prove);
-                        branches.Push(new SubTree(currBranch.prove, currBranch.buffer, currBranch.proofPath, 1, currBranch.nodeNum, currBranch.factNum + 1));
-                        branches.Push(new SubTree(possibleRules[currBranch.nodeNum].Conditions.ToList()[currBranch.factNum], currBranch.buffer, t, 0));
+                        var t = currST.path.ToList();
+                        t.Add(currST.prove);
+                        subTrees.Push(new SubTree(currST.prove, currST.buffer, currST.path, 1, currST.nodeNum, currST.factNum + 1));
+                        subTrees.Push(new SubTree(possibleRules[currST.nodeNum].Conditions.ToList()[currST.factNum], currST.buffer, t, 0));
                         continue;
                     }
                 }

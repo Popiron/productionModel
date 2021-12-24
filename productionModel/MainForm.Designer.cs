@@ -30,6 +30,7 @@ namespace productionModel
         private void InitializeComponent()
         {
             this.controlPanel = new System.Windows.Forms.GroupBox();
+            this.backwardOutputButton = new System.Windows.Forms.Button();
             this.dFactsBox = new System.Windows.Forms.CheckedListBox();
             this.directOutputButton = new System.Windows.Forms.Button();
             this.checkedFactsBox = new System.Windows.Forms.CheckedListBox();
@@ -38,7 +39,7 @@ namespace productionModel
             this.solutionTextBox = new System.Windows.Forms.RichTextBox();
             this.clearTextBoxButton = new System.Windows.Forms.Button();
             this.outputTextBox = new System.Windows.Forms.RichTextBox();
-            this.backwardOutputButton = new System.Windows.Forms.Button();
+            this.dFactscheckBox = new System.Windows.Forms.CheckBox();
             this.controlPanel.SuspendLayout();
             this.outputBox.SuspendLayout();
             this.resultBox.SuspendLayout();
@@ -46,6 +47,7 @@ namespace productionModel
             // 
             // controlPanel
             // 
+            this.controlPanel.Controls.Add(this.dFactscheckBox);
             this.controlPanel.Controls.Add(this.backwardOutputButton);
             this.controlPanel.Controls.Add(this.dFactsBox);
             this.controlPanel.Controls.Add(this.directOutputButton);
@@ -58,6 +60,17 @@ namespace productionModel
             this.controlPanel.TabIndex = 0;
             this.controlPanel.TabStop = false;
             this.controlPanel.Text = "Найстройки";
+            // 
+            // backwardOutputButton
+            // 
+            this.backwardOutputButton.Location = new System.Drawing.Point(11, 358);
+            this.backwardOutputButton.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            this.backwardOutputButton.Name = "backwardOutputButton";
+            this.backwardOutputButton.Size = new System.Drawing.Size(188, 28);
+            this.backwardOutputButton.TabIndex = 3;
+            this.backwardOutputButton.Text = "Обратный вывод";
+            this.backwardOutputButton.UseVisualStyleBackColor = true;
+            this.backwardOutputButton.Click += new System.EventHandler(this.backwardOutputButton_Click);
             // 
             // dFactsBox
             // 
@@ -147,16 +160,16 @@ namespace productionModel
             this.outputTextBox.TabIndex = 0;
             this.outputTextBox.Text = "";
             // 
-            // backwardOutputButton
+            // dFactscheckBox
             // 
-            this.backwardOutputButton.Location = new System.Drawing.Point(11, 358);
-            this.backwardOutputButton.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
-            this.backwardOutputButton.Name = "backwardOutputButton";
-            this.backwardOutputButton.Size = new System.Drawing.Size(188, 28);
-            this.backwardOutputButton.TabIndex = 3;
-            this.backwardOutputButton.Text = "Обратный вывод";
-            this.backwardOutputButton.UseVisualStyleBackColor = true;
-            this.backwardOutputButton.Click += new System.EventHandler(this.backwardOutputButton_Click);
+            this.dFactscheckBox.AutoSize = true;
+            this.dFactscheckBox.Location = new System.Drawing.Point(11, 327);
+            this.dFactscheckBox.Name = "dFactscheckBox";
+            this.dFactscheckBox.Size = new System.Drawing.Size(76, 19);
+            this.dFactscheckBox.TabIndex = 4;
+            this.dFactscheckBox.Text = "Показать";
+            this.dFactscheckBox.UseVisualStyleBackColor = true;
+            this.dFactscheckBox.CheckedChanged += new System.EventHandler(this.dFactscheckBox_CheckedChanged);
             // 
             // MainForm
             // 
@@ -169,6 +182,7 @@ namespace productionModel
             this.Name = "MainForm";
             this.Text = "Main";
             this.controlPanel.ResumeLayout(false);
+            this.controlPanel.PerformLayout();
             this.outputBox.ResumeLayout(false);
             this.resultBox.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -187,6 +201,7 @@ namespace productionModel
         private System.Windows.Forms.GroupBox resultBox;
         private System.Windows.Forms.RichTextBox solutionTextBox;
         private System.Windows.Forms.Button backwardOutputButton;
+        private System.Windows.Forms.CheckBox dFactscheckBox;
     }
 }
 
